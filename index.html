@@ -3,40 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naturaleza y Tamaño de la Empresa</title>
+    <title>Proyecto: Naturaleza y Tamaño de la empresa - UCN</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
-        h1, h2 { color: #004b87; }
-        .section { background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 5px solid #004b87; }
-        .interactive-container { text-align: center; margin-top: 30px; }
-        input[type="range"] { width: 80%; margin: 20px 0; }
-        canvas { max-width: 100%; background: white; border-radius: 8px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 950px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+        header { background: #004b87; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: center; }
+        h2 { color: #004b87; border-bottom: 2px solid #004b87; padding-bottom: 10px; }
+        .section { background: white; padding: 25px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .interactive-container { text-align: center; margin-top: 30px; padding: 20px; background: #fff; border: 1px solid #ddd; border-radius: 8px; }
+        input[type="range"] { width: 80%; margin: 20px 0; cursor: pointer; }
+        canvas { max-width: 100%; height: 400px !important; }
+        .footer { text-align: center; font-size: 0.9em; color: #666; margin-top: 40px; }
     </style>
 </head>
 <body>
 
-    <h1>Naturaleza y Tamaño de la Empresa</h1>
+    <header>
+        <h1>Naturaleza y Tamaño de la Empresa</h1>
+        <p>  Caso Aplicado: McDonald's 
+        Analisis de la empresa </p>
+    </header>
     
     <div class="section">
         <h2>1. Dimensión Teórica: La Empresa como Sustituto del Mercado</h2>
-        <p>Según el Capítulo 2 (Tarziján y Paredes), las empresas existen porque utilizar el mecanismo de precios del mercado genera <strong>costos de transacción</strong> (búsqueda, negociación, contratos). Cuando la organización interna de estas actividades (jerarquía) resulta más eficiente y económica que recurrir al mercado, la empresa sustituye al mercado.</p>
-        </div>
+        <p>De acuerdo con el análisis de <strong>Tarziján y Paredes</strong>, la naturaleza de la empresa se comprende a través de la teoría de los <strong>costos de transacción</strong>. En un mercado perfecto, el sistema de precios asignaría recursos eficientemente, pero en la realidad existen costos de búsqueda, negociación y monitoreo.</p>
+        <p>La empresa surge como una respuesta institucional que <strong>sustituye al mercado</strong>. Cuando el costo de transar externamente es mayor al costo de organizar dicha actividad internamente, la firma opta por la integración. El límite de este crecimiento lo definen los <strong>costos de coordinación</strong> (burocracia) que aparecen al aumentar la complejidad organizacional.</p>
+    </div>
 
     <div class="section">
-        <h2>2. Aplicación Práctica: [Nombre de la Industria]</h2>
-        <p>Análisis del grado de integración vertical y determinantes de gobernanza en la industria seleccionada.</p>
-        </div>
+        <h2>2. Aplicación Práctica: Estructura de Gobernanza en McDonald's</h2>
+        <p>McDonald's equilibra eficiencia operativa y control mediante estructuras de gobernanza híbridas:</p>
+        <ul>
+            <li><strong>Integración hacia atrás y Suministros:</strong> Evita la integración vertical total en la producción de materias primas para no asumir altos costos de coordinación. En su lugar, utiliza contratos de largo plazo fuertemente especificados con proveedores para mitigar riesgos de calidad y comportamiento oportunista.</li>
+            <li><strong>Modelo de Franquicias (Gobernanza Híbrida):</strong> Mitiga problemas de agencia al convertir al administrador en dueño de la franquicia. Esto alinea incentivos y transfiere el riesgo, reduciendo drásticamente los costos de monitoreo centralizado.</li>
+            <li><strong>Activos Críticos:</strong> La corporación retiene la propiedad absoluta sobre la marca y los bienes raíces donde la especificidad del activo es crítica, asegurando el control estratégico del negocio.</li>
+        </ul>
+    </div>
 
     <div class="section">
         <h2>3. Interactividad: Punto Óptimo de Integración</h2>
-        <p>Ajusta el nivel de integración de la empresa para visualizar el trade-off entre los costos de transacción (que disminuyen al integrarse) y los costos de coordinación interna (que aumentan por la burocracia).</p>
+        <p>Mueve el control deslizante para observar el trade-off entre costos de transacción (mercado) y costos de coordinación (internos).</p>
         
         <div class="interactive-container">
-            <label for="integrationSlider"><strong>Nivel de Integración Vertical: <span id="sliderValue">50</span>%</strong></label><br>
+            <label><strong>Nivel de Integración Vertical: <span id="sliderValue">50</span>%</strong></label><br>
             <input type="range" id="integrationSlider" min="0" max="100" value="50">
             <canvas id="costChart"></canvas>
         </div>
+    </div>
+
+    <div class="footer">
+        Desplegado para la Evaluación de Organización Industrial - UCN
     </div>
 
     <script>
@@ -44,33 +60,31 @@
         const slider = document.getElementById('integrationSlider');
         const sliderValue = document.getElementById('sliderValue');
 
-        // Generar datos base
         const xValues = Array.from({length: 101}, (_, i) => i);
-        const transactionCosts = xValues.map(x => 100 - (x * 0.8)); // Costos de mercado bajan al integrarse
-        const coordinationCosts = xValues.map(x => 10 + (x * x * 0.01)); // Costos de burocracia suben exponencialmente
-        const totalCosts = transactionCosts.map((tc, i) => tc + coordinationCosts[i]); // Curva en U
+        const transactionCosts = xValues.map(x => 100 - (x * 0.85));
+        const coordinationCosts = xValues.map(x => 15 + (x * x * 0.012));
+        const totalCosts = transactionCosts.map((tc, i) => tc + coordinationCosts[i]);
 
         const costChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: xValues,
                 datasets: [
-                    { label: 'Costos de Transacción', data: transactionCosts, borderColor: 'red', fill: false, tension: 0.4 },
-                    { label: 'Costos de Coordinación', data: coordinationCosts, borderColor: 'blue', fill: false, tension: 0.4 },
-                    { label: 'Costo Total', data: totalCosts, borderColor: 'green', borderWidth: 3, fill: false, tension: 0.4 },
-                    { label: 'Nivel Actual', data: [{x: 50, y: totalCosts[50]}], backgroundColor: 'black', pointRadius: 8, type: 'scatter' }
+                    { label: 'Costos de Transacción (Mercado)', data: transactionCosts, borderColor: '#e74c3c', fill: false, borderDash: [5, 5] },
+                    { label: 'Costos de Coordinación (Internos)', data: coordinationCosts, borderColor: '#3498db', fill: false, borderDash: [5, 5] },
+                    { label: 'Costo Total', data: totalCosts, borderColor: '#27ae60', borderWidth: 4, fill: false, tension: 0.3 },
+                    { label: 'Posición Óptima', data: [{x: 50, y: totalCosts[50]}], backgroundColor: '#2c3e50', pointRadius: 10, type: 'scatter' }
                 ]
             },
             options: {
+                responsive: true,
                 scales: {
-                    x: { title: { display: true, text: 'Nivel de Integración Vertical (%)' } },
-                    y: { title: { display: true, text: 'Costos' }, min: 0, max: 150 }
-                },
-                plugins: { tooltip: { enabled: false } }
+                    x: { title: { display: true, text: 'Grado de Integración Vertical (%)' } },
+                    y: { title: { display: true, text: 'Costo Monetario' }, min: 0 }
+                }
             }
         });
 
-        // Actualizar punto en el gráfico cuando se mueve el slider
         slider.addEventListener('input', function() {
             const val = parseInt(this.value);
             sliderValue.textContent = val;
