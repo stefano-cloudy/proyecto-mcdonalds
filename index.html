@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naturaleza y Tamaño de la Empresa</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1, h2 { color: #004b87; }
+        .section { background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 5px solid #004b87; }
+        .interactive-container { text-align: center; margin-top: 30px; }
+        input[type="range"] { width: 80%; margin: 20px 0; }
+        canvas { max-width: 100%; background: white; border-radius: 8px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <h1>Naturaleza y Tamaño de la Empresa</h1>
+    
+    <div class="section">
+        <h2>1. Dimensión Teórica: La Empresa como Sustituto del Mercado</h2>
+        <p>Según el Capítulo 2 (Tarziján y Paredes), las empresas existen porque utilizar el mecanismo de precios del mercado genera <strong>costos de transacción</strong> (búsqueda, negociación, contratos). Cuando la organización interna de estas actividades (jerarquía) resulta más eficiente y económica que recurrir al mercado, la empresa sustituye al mercado.</p>
+        </div>
+
+    <div class="section">
+        <h2>2. Aplicación Práctica: [Nombre de la Industria]</h2>
+        <p>Análisis del grado de integración vertical y determinantes de gobernanza en la industria seleccionada.</p>
+        </div>
+
+    <div class="section">
+        <h2>3. Interactividad: Punto Óptimo de Integración</h2>
+        <p>Ajusta el nivel de integración de la empresa para visualizar el trade-off entre los costos de transacción (que disminuyen al integrarse) y los costos de coordinación interna (que aumentan por la burocracia).</p>
+        
+        <div class="interactive-container">
+            <label for="integrationSlider"><strong>Nivel de Integración Vertical: <span id="sliderValue">50</span>%</strong></label><br>
+            <input type="range" id="integrationSlider" min="0" max="100" value="50">
+            <canvas id="costChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('costChart').getContext('2d');
+        const slider = document.getElementById('integrationSlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        // Generar datos base
+        const xValues = Array.from({length: 101}, (_, i) => i);
+        const transactionCosts = xValues.map(x => 100 - (x * 0.8)); // Costos de mercado bajan al integrarse
+        const coordinationCosts = xValues.map(x => 10 + (x * x * 0.01)); // Costos de burocracia suben exponencialmente
+        const totalCosts = transactionCosts.map((tc, i) => tc + coordinationCosts[i]); // Curva en U
+
+        const costChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: xValues,
+                datasets: [
+                    { label: 'Costos de Transacción', data: transactionCosts, borderColor: 'red', fill: false, tension: 0.4 },
+                    { label: 'Costos de Coordinación', data: coordinationCosts, borderColor: 'blue', fill: false, tension: 0.4 },
+                    { label: 'Costo Total', data: totalCosts, borderColor: 'green', borderWidth: 3, fill: false, tension: 0.4 },
+                    { label: 'Nivel Actual', data: [{x: 50, y: totalCosts[50]}], backgroundColor: 'black', pointRadius: 8, type: 'scatter' }
+                ]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Nivel de Integración Vertical (%)' } },
+                    y: { title: { display: true, text: 'Costos' }, min: 0, max: 150 }
+                },
+                plugins: { tooltip: { enabled: false } }
+            }
+        });
+
+        // Actualizar punto en el gráfico cuando se mueve el slider
+        slider.addEventListener('input', function() {
+            const val = parseInt(this.value);
+            sliderValue.textContent = val;
+            costChart.data.datasets[3].data = [{x: val, y: totalCosts[val]}];
+            costChart.update();
+        });
+    </script>
+</body>
+</html>
